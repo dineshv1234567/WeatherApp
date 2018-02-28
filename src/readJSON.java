@@ -6,10 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-
-
-public class ReadJson {
-
+public class readJSON {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 	JSONParser parser=new JSONParser();

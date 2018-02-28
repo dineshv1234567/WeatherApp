@@ -3,13 +3,15 @@ import java.io.IOException;
 
 import org.json.simple.JSONObject;
 
-public class CreateJson {
+public class createJSON {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
     JSONObject obj = new JSONObject();
     obj.put("name", "neha");
+     
+     
     obj.put("location", "sangrur");
     
     //JSONArray....add
@@ -24,5 +26,4 @@ public class CreateJson {
 	}
     System.out.println(obj);
 	}
-
 }
