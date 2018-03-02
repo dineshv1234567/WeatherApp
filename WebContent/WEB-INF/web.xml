@@ -9,4 +9,12 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <servlet-name>CreateJson</servlet-name>
+    <servlet-class>CreateJson</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateJson</servlet-name>
+    <url-pattern>/CreateJson</url-pattern>
+</servlet-mapping>
 </web-app>
