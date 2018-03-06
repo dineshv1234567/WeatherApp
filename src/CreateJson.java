@@ -1,5 +1,3 @@
-
-
 import java.io.Console;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,32 +27,31 @@ public class CreateJson extends HttpServlet {
 	 
     public CreateJson() {
         super();
-        // TODO Auto-generated constructor stub
     }
    
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		String path="/home/sapient/Documents/workspace-sts-3.9.2.RELEASE/WeatherApplication/WebContent/myFile.json";
+		
+		//on clicking add button
 		if(action.equalsIgnoreCase("add"))
 		{		
 			JSONObject main = new JSONObject();
 			JSONArray  cities = new JSONArray();
 			JSONObject city = new JSONObject();
-			
-			 File f = new File("/home/sapient/Documents/workspace-sts-3.9.2.RELEASE/WeatherApplication/WebContent/myFile.json");
+			 File f = new File(path);
 	    	   if(!(f.exists())) { 
 	    		   System.out.println("File not exists");
 					JSONObject object=new JSONObject();
 					String name=request.getParameter("name");
 					String id=request.getParameter("id");
-					
-			       object.put("name",name);
+			        object.put("name",name);
 					object.put("id",id);
-				       cities.add(object);
-				       main.put("cities",cities);
-				       System.out.println("---"+main);
-				
+				    cities.add(object);
+				    main.put("cities",cities);
+				    System.out.println(main);
+				    //wiriting to file
 						  try(FileWriter fwrite=new FileWriter(path)) 
 					    {
 					    	fwrite.write(main.toString());
@@ -62,20 +59,18 @@ public class CreateJson extends HttpServlet {
 					    } catch (IOException e) {
 							e.printStackTrace();
 						}
-	    	   }
-	    	   else if(f.exists()){
-	    		   System.out.println("File exists");
-			int count = 0;
-				JSONParser parser = new JSONParser();
-			    try {
+	    	   }else if(f.exists()){
+	    		   //if file exists, then read from file, make change and write back to it
+	    		  System.out.println("File exists");
+	    		  int count = 0;
+	    		  JSONParser parser = new JSONParser();
+	    		  try {
 					main = (JSONObject) parser.parse(new FileReader(path));
-					System.out.println(main.get("cities"));
 					cities=(JSONArray) main.get("cities");
 					count=cities.size();
-					System.out.println("++++++++"+count);
-				} catch (Exception e) {
+	    		  } catch (Exception e) {
 					e.printStackTrace();
-				}
+	    		  }
 			
 			try {
 				count++;
@@ -87,59 +82,59 @@ public class CreateJson extends HttpServlet {
 					JSONObject object=new JSONObject();
 					String name=request.getParameter("name");
 					String id=request.getParameter("id");
-			       object.put("name",name);
+					object.put("name",name);
 					object.put("id",id);
-				       cities.add(0,object);
-				       main.put("cities",cities);
-				       System.out.println(main);
-				       try(FileWriter fwrite=new FileWriter(path)) 
+				    cities.add(0,object);
+				    main.put("cities",cities);
+				    System.out.println(main);
+				    try(FileWriter fwrite=new FileWriter(path)) 
 					    {
 					    	fwrite.write(main.toString());
 					    	fwrite.flush();
 					    } catch (IOException e) {
 							e.printStackTrace();
-						}
+					    }
 				}
 				
-			} catch (Exception e) {
+			}catch (Exception e) {
 				
 				e.printStackTrace();
 			} 	
-	    	   }
+	    	}
 		}
 		
+		//on clicking view button
 		if(action.equalsIgnoreCase("view"))
 		{
 			System.out.println("in view Favourites");
 			JSONParser parser=new JSONParser();
 			try {
 				JSONObject main = new JSONObject();
-				main = (JSONObject) parser.parse(new FileReader("/home/sapient/Documents/workspace-sts-3.9.2.RELEASE/WeatherApplication/WebContent/myFile.json"));
-				 response.setContentType("application/json");
-			    	response.getWriter().write(main.toString());
-		}
-		catch(FileNotFoundException e) {
+				main = (JSONObject) parser.parse(new FileReader(path));
+				response.setContentType("application/json");
+			    response.getWriter().write(main.toString());
+			}
+			catch(FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		catch(IOException e) {
+			}
+			catch(IOException e) {
 			e.printStackTrace();
-		}
-		catch(ParseException e) {
+			}
+			catch(ParseException e) {
 			e.printStackTrace();
-		}
-		catch(Exception e) {
+			}
+			catch(Exception e) {
 			e.printStackTrace();
-		}
+			}
 		}
 		
+		//on clicking remove button
 		if(action.equalsIgnoreCase("remove")) {
 			String name=request.getParameter("name");
-			
-			
 			JSONParser parser=new JSONParser();
 			try {
 				JSONObject main = new JSONObject();
-				main = (JSONObject) parser.parse(new FileReader("/home/sapient/Documents/workspace-sts-3.9.2.RELEASE/WeatherApplication/WebContent/myFile.json"));
+				main = (JSONObject) parser.parse(new FileReader(path));
 				JSONArray arr=new JSONArray();
 				arr=(JSONArray) main.get("cities");
 				for(int i=0;i<arr.size();i++) {
@@ -159,7 +154,6 @@ public class CreateJson extends HttpServlet {
 						}
 					}
 				}
-				
 		}
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
@@ -173,11 +167,7 @@ public class CreateJson extends HttpServlet {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-			
 		}
-		
-		
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

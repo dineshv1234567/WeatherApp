@@ -5,32 +5,31 @@
 </head>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<body>
 
+<body>
 <div class="jumbotron">
 	<h2 class="text-center">Get Current weather</h2>
 </div>	
-
 <div class="container">
 	<div class="row">
 		<h3 class="text-center text-primary">Enter City name</h3>
 		<span id="error"></span>
 	</div>
-
-	<div class="row form-group form-inline text-center">
+<div class="row form-group form-inline text-center">
 		<input type="text" name="city" id="city" class="form-control" placeholder="city Name">	
 		<button id="submitWeather" class="btn btn-primary" onclick="getData()">Search city</button>
 		<button id="add" class="btn btn-primary" onClick="add()">Add to Favourites</button>
 		<button id="showFav" class="btn btn-primary" onClick="showFav()">Show Favourites</button>
-	</div>
+<!-- output will be displayed -->
+</div>
 	<div id="name"></div>
 	<div id="id"></div>
 	<div id="show"></div>
 </div>
-
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- user defined js -->
 <script type="text/javascript" src="weather.js"></script>
 </body>
 </html>
