@@ -2,7 +2,7 @@ function getData(){
 var xmlHttp = new XMLHttpRequest();
 var word=document.getElementById("city").value;
 //document.write(word);
-var url ="http://api.openweathermap.org/data/2.5/weather?q="+word+"&unit=metrics&appid=4f51cc3581658734467f957800c7625d";
+var url ="http://api.openweathermap.org/data/2.5/weather?q="+word+"&unit=metrics&appid=c949e999511b1499fcda272cc09b2fdf";
 xmlHttp.open("GET",url, true);
 xmlHttp.send();
 xmlHttp.onreadystatechange = function() {
@@ -24,12 +24,17 @@ xmlHttp.onreadystatechange = function() {
 function add(){
 	var name=document.getElementById("name").innerHTML;
 	var id=document.getElementById("id").innerHTML;
+   if(!(name === "")){	   
 	console.log("name : "+name+" | id : "+id);
 	 var xmlHttp = new XMLHttpRequest();
 	 var urlFav= "http://localhost:8082/WeatherApplication/CreateJson?name="+name+"&id="+id +"&action=add";
 	// console.log(urlFav);
 	 xmlHttp.open("GET",urlFav,true);
 	 xmlHttp.send();
+   }
+   else{
+	   console.log("Please enter value");
+   }
 }
 
 function showFav(){
@@ -47,7 +52,6 @@ function showFav(){
 				var len = data.cities;
 				var arrSize=len.length;
 				var displayData;
-				//"<input type='button' value='Remove' onclick='remove(" + data.cities[i].name + ")'
 			for(let i=0;i<arrSize;i++){
 					if(i==0){
 						displayData ="Name : "+data.cities[i].name;
@@ -55,7 +59,7 @@ function showFav(){
 					else{
 					displayData +="Name : "+data.cities[i].name;
 					}
-					displayData +='<button  class="btn btn-primary" onclick="remove(\''+data.cities[i].name+'\'\)">Remove</button>'+"<br><hr>";
+					displayData +='&emsp;<button  class="btn btn-secondary" onclick="remove(\''+data.cities[i].name+'\'\)">Remove</button>'+"<br><hr>";
 				}
 				document.getElementById("show").innerHTML = displayData;
 			}
@@ -67,8 +71,7 @@ function remove(data){
 	 var urlFav= "http://localhost:8082/WeatherApplication/CreateJson?name="+data+"&action=remove";
 		 xmlHttp.open("GET",urlFav,true);
 		 xmlHttp.send();
-	
-	
+		// showFav();
 }
 
 

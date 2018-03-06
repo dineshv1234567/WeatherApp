@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Set;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,35 +32,80 @@ public class CreateJson extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
    
-
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
-		
+		String path="/home/sapient/Documents/workspace-sts-3.9.2.RELEASE/WeatherApplication/WebContent/myFile.json";
 		if(action.equalsIgnoreCase("add"))
-		{
-			JSONObject object=new JSONObject();
-			String name=request.getParameter("name");
-			String id=request.getParameter("id");
-		       object.put("name",name);
-			   object.put("id",id);
-			   //System.out.println(object);
-		       arr.add(object);
-		       JSONObject main = new JSONObject();
-		       main.put("cities",arr);
-		       System.out.println(arr);
-		       if(arr.size()<=10) {
-				  try(FileWriter fwrite=new FileWriter("/home/sapient/Documents/workspace-sts-3.9.2.RELEASE/WeatherApplication/WebContent/myFile.json")) 
-				    {
-				    	fwrite.write(main.toString());
-				    	fwrite.flush();
-				    } catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-		}else {
-			System.out.println("size exceeded");
-		}
+		{		
+			JSONObject main = new JSONObject();
+			JSONArray  cities = new JSONArray();
+			JSONObject city = new JSONObject();
+			
+			 File f = new File("/home/sapient/Documents/workspace-sts-3.9.2.RELEASE/WeatherApplication/WebContent/myFile.json");
+	    	   if(!(f.exists())) { 
+	    		   System.out.println("File not exists");
+					JSONObject object=new JSONObject();
+					String name=request.getParameter("name");
+					String id=request.getParameter("id");
+					
+			       object.put("name",name);
+					object.put("id",id);
+				       cities.add(object);
+				       main.put("cities",cities);
+				       System.out.println("---"+main);
+				
+						  try(FileWriter fwrite=new FileWriter(path)) 
+					    {
+					    	fwrite.write(main.toString());
+					    	fwrite.flush();
+					    } catch (IOException e) {
+							e.printStackTrace();
+						}
+	    	   }
+	    	   else if(f.exists()){
+	    		   System.out.println("File exists");
+			int count = 0;
+				JSONParser parser = new JSONParser();
+			    try {
+					main = (JSONObject) parser.parse(new FileReader(path));
+					System.out.println(main.get("cities"));
+					cities=(JSONArray) main.get("cities");
+					count=cities.size();
+					System.out.println("++++++++"+count);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			
+			try {
+				count++;
+				if(count>10)
+				{
+					System.out.println("size exceeded");
+				}
+				else {
+					JSONObject object=new JSONObject();
+					String name=request.getParameter("name");
+					String id=request.getParameter("id");
+			       object.put("name",name);
+					object.put("id",id);
+				       cities.add(0,object);
+				       main.put("cities",cities);
+				       System.out.println(main);
+				       try(FileWriter fwrite=new FileWriter(path)) 
+					    {
+					    	fwrite.write(main.toString());
+					    	fwrite.flush();
+					    } catch (IOException e) {
+							e.printStackTrace();
+						}
+				}
+				
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			} 	
+	    	   }
 		}
 		
 		if(action.equalsIgnoreCase("view"))
@@ -92,13 +140,26 @@ public class CreateJson extends HttpServlet {
 			try {
 				JSONObject main = new JSONObject();
 				main = (JSONObject) parser.parse(new FileReader("/home/sapient/Documents/workspace-sts-3.9.2.RELEASE/WeatherApplication/WebContent/myFile.json"));
-
-				for(int i=0;i<main.size();i++) {
-					Object data=main.get("cities");
-					if(data.toString().contains(name)) {
-						
+				JSONArray arr=new JSONArray();
+				arr=(JSONArray) main.get("cities");
+				for(int i=0;i<arr.size();i++) {
+					JSONObject temp=new JSONObject();
+					temp=(JSONObject) arr.get(i);
+					if(temp.get("name").equals(name)) {
+						arr.remove(i);
+						System.out.println(arr);
+						JSONObject data=new JSONObject();
+						data.put("cities", arr);
+						try(FileWriter fwrite=new FileWriter(path)) 
+					    {
+					    	fwrite.write(main.toString());
+					    	fwrite.flush();
+					    } catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				}
+				
 		}
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
