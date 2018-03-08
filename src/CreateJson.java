@@ -82,6 +82,10 @@ public class CreateJson extends HttpServlet {
 					JSONObject object=new JSONObject();
 					String name=request.getParameter("name");
 					String id=request.getParameter("id");
+					if(cities.contains(name)) {
+						System.out.println("Already contains");
+					}
+					else {
 					object.put("name",name);
 					object.put("id",id);
 				    cities.add(0,object);
@@ -94,6 +98,7 @@ public class CreateJson extends HttpServlet {
 					    } catch (IOException e) {
 							e.printStackTrace();
 					    }
+					}
 				}
 				
 			}catch (Exception e) {
